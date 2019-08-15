@@ -16,7 +16,7 @@ class PrawRequest:
     typesOfImages = ['jpeg', 'jpg', 'png']
     titleLength = 20
     redditLinks = ['reddit', 'redd.it']
-    fileRegex = r'[ ":;.,|/\\\'’?!*#@$%()&]'
+    fileRegex = r'[ ":;.,|<>{}+=/\\\'’?!*#@$%()&]'
 
     def __downloadImageResults(self, submission, r, sub):
         if not os.path.exists("images/" + sub):
