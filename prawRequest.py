@@ -22,7 +22,7 @@ class PrawRequest:
             os.makedirs("images/" + sub)
         for imageType in self.typesOfImages:
             if imageType in r.headers.get('content-type').lower():
-                name = re.sub(r'[ .,/\\\'’?!*#@$%()&]', "",
+                name = re.sub(r'[ ".,/\\\'’?!*#@$%()&]', "",
                               submission.title.lower())
                 open("images/" + sub + "/" + name[0:self.titleLength] + '.' +
                      imageType, 'wb').write(r.content)
