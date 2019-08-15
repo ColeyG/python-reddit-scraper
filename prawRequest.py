@@ -31,7 +31,7 @@ class PrawRequest:
     def __downloadSelfTextResults(self, submission, r, sub):
         if not os.path.exists("selfText/" + sub):
             os.makedirs("selfText/" + sub)
-        name = re.sub(r'[ .,/\\\'’?!*#@$%()&]', "",
+        name = re.sub(r'[ ":;.,/\\\'’?!*#@$%()&]', "",
                       submission.title.lower())
         open("selfText/" + sub + "/" + name[0:self.titleLength] + '.' +
              'txt', 'wb').write(submission.selftext)
