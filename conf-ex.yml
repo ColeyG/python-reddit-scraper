@@ -1,0 +1,4 @@
+praw_conf:
+  id: ID-HERE
+  secret: SECRET-HERE
+  user_agent: AGENT-HERE
