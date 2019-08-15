@@ -16,13 +16,14 @@ class PrawRequest:
     typesOfImages = ['jpeg', 'jpg', 'png']
     titleLength = 20
     redditLinks = ['reddit', 'redd.it']
+    fileRegex = r'[ ":;.,|/\\\'’?!*#@$%()&]'
 
     def __downloadImageResults(self, submission, r, sub):
         if not os.path.exists("images/" + sub):
             os.makedirs("images/" + sub)
         for imageType in self.typesOfImages:
             if imageType in r.headers.get('content-type').lower():
-                name = re.sub(r'[ ":;.,/\\\'’?!*#@$%()&]', "",
+                name = re.sub(self.fileRegex, "",
                               submission.title.lower())
                 open("images/" + sub + "/" + name[0:self.titleLength] + '.' +
                      imageType, 'wb').write(r.content)
@@ -31,7 +32,7 @@ class PrawRequest:
     def __downloadSelfTextResults(self, submission, r, sub):
         if not os.path.exists("selfText/" + sub):
             os.makedirs("selfText/" + sub)
-        name = re.sub(r'[ ":;.,/\\\'’?!*#@$%()&]', "",
+        name = re.sub(self.fileRegex, "",
                       submission.title.lower())
         open("selfText/" + sub + "/" + name[0:self.titleLength] + '.' +
              'txt', 'wb').write(submission.selftext)
