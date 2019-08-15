@@ -5,6 +5,7 @@ import re
 import yaml
 import time
 from anyOfListAreInString import anyOfListAreInString
+import os
 
 
 class PrawRequest:
@@ -16,23 +17,27 @@ class PrawRequest:
     titleLength = 20
     redditLinks = ['reddit', 'redd.it']
 
-    def __downloadImageResults(self, submission, r):
+    def __downloadImageResults(self, submission, r, sub):
+        if not os.path.exists("images/" + sub):
+            os.makedirs("images/" + sub)
         for imageType in self.typesOfImages:
             if imageType in r.headers.get('content-type').lower():
                 name = re.sub(r'[ .,/\\\'’?!*#@$%()&]', "",
                               submission.title.lower())
-                open("images/" + name[0:self.titleLength] + '.' +
+                open("images/" + sub + "/" + name[0:self.titleLength] + '.' +
                      imageType, 'wb').write(r.content)
                 print(submission.title)
 
-    def __downloadSelfTextResults(self, submission, r):
+    def __downloadSelfTextResults(self, submission, r, sub):
+        if not os.path.exists("selfText/" + sub):
+            os.makedirs("selfText/" + sub)
         name = re.sub(r'[ .,/\\\'’?!*#@$%()&]', "",
                       submission.title.lower())
-        open("selfText/" + name[0:self.titleLength] + '.' +
+        open("selfText/" + sub + "/" + name[0:self.titleLength] + '.' +
              'txt', 'wb').write(submission.selftext)
         print(submission.title)
 
-    def __saveLink(self, submission):
+    def __saveLink(self, submission, sub):
         with open("links.txt", "a") as myfile:
             myfile.write(submission.url + "\n")
         print(submission.title)
@@ -49,13 +54,13 @@ class PrawRequest:
                              'User-agent': self.config['praw_conf']['user_agent']}, allow_redirects=True)
             if 'images' in types and 'image' in r.headers.get('content-type').lower():
                 print("-Image-")
-                self.__downloadImageResults(submission, r)
+                self.__downloadImageResults(submission, r, sub)
                 print("-----------------")
             if 'selfText' in types and submission.selftext != "":
                 print("-Self Text-")
-                self.__downloadSelfTextResults(submission, r)
+                self.__downloadSelfTextResults(submission, r, sub)
                 print("-----------------")
             if 'link' in types and not anyOfListAreInString(submission.url, self.redditLinks):
                 print("-Link Post-")
-                self.__saveLink(submission)
+                self.__saveLink(submission, sub)
                 print("-----------------")
