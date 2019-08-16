@@ -54,14 +54,14 @@ class PrawRequest:
             r = requests.get(submission.url, headers={
                              'User-agent': self.config['praw_conf']['user_agent']}, allow_redirects=True)
             if 'images' in types and 'image' in r.headers.get('content-type').lower():
-                print("-Image-")
+                print("-Image- " + sub)
                 self.__downloadImageResults(submission, r, sub)
                 print("-----------------")
             if 'selfText' in types and submission.selftext != "":
-                print("-Self Text-")
+                print("-Self Text- " + sub)
                 self.__downloadSelfTextResults(submission, r, sub)
                 print("-----------------")
             if 'link' in types and not anyOfListAreInString(submission.url, self.redditLinks):
-                print("-Link Post-")
+                print("-Link Post- " + sub)
                 self.__saveLink(submission, sub)
                 print("-----------------")
