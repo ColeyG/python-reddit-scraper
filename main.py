@@ -1,17 +1,21 @@
 import prawRequest
 import time
-import sys
+import yaml
 
 repeatInterval = 86400
 amountOfImages = 1
+config = yaml.safe_load(open("conf.yml"))
 
-if len(sys.argv) > 1:
-    if sys.argv[1] in 'repeat':
-        repeating = True
-    else:
-        print(sys.argv[1] + " is not expected")
-else:
-    repeating = False
+
+# conf.yml take precedence over passed parameters
+if 'repeating' in config['praw_conf'] and config['praw_conf']['repeating'] is True:
+    repeating = True
+
+if 'repeat_interval' in config['praw_conf']:
+    repeatInterval = config['praw_conf']['repeat_interval']
+
+if 'amount' in config['praw_conf']:
+    amountOfImages = config['praw_conf']['amount']
 
 
 def requests():
